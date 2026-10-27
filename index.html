@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LABraga Games – Jogos para telemóvel feitos em Portugal</title>
+<meta name="description" content="Jogos para telemóvel feitos em Portugal: PipeConnect e Sudoku. Grátis no Android.">
+<meta name="theme-color" content="#5271ff">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<!-- Pré-visualização ao partilhar o link (Instagram, WhatsApp, etc.) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="LABraga Games">
+<meta property="og:description" content="Jogos para telemóvel feitos em Portugal. Grátis no Android.">
+<meta property="og:image" content="https://labraga84.github.io/assets/og.png">
+<meta property="og:url" content="https://labraga84.github.io/">
+<meta name="twitter:card" content="summary_large_image">
+
+<style>
+  /* ===== Cores e medidas da marca ===== */
+  :root {
+    --azul: #5271ff;        /* fundo do logótipo */
+    --azul-escuro: #1a00a8; /* L do monograma */
+    --azul-medio: #004aad;  /* B do monograma */
+    --tinta: #14172b;
+    --tinta-suave: #4a4f6a;
+    --fundo: #f4f6ff;
+    --cartao: #ffffff;
+    --linha: #dfe3f8;
+    --raio: 18px;
+    --largura: 1040px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--fundo);
+    color: var(--tinta);
+    /* Sem fontes externas: usa as do sistema */
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.55;
+    -webkit-text-size-adjust: 100%;
+  }
+  a { color: var(--azul-medio); }
+  .caixa { width: 100%; max-width: var(--largura); margin: 0 auto; padding: 0 20px; }
+
+  /* ===== Cabeçalho ===== */
+  .topo {
+    background: var(--azul);
+    color: #fff;
+    padding: 18px 0 64px;
+  }
+  .barra {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .barra .marca { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .2px; }
+  .barra .marca img { width: 40px; height: 40px; border-radius: 10px; }
+  .idioma { display: inline-flex; background: rgba(255,255,255,.18); border-radius: 999px; padding: 3px; }
+  .idioma button {
+    border: 0; background: transparent; color: #fff; font: inherit; font-weight: 600;
+    padding: 6px 14px; border-radius: 999px; cursor: pointer; min-height: 36px;
+  }
+  .idioma button[aria-pressed="true"] { background: #fff; color: var(--azul-escuro); }
+
+  .heroi { display: flex; align-items: center; gap: 36px; padding-top: 44px; }
+  .heroi img.logo { width: 190px; height: auto; flex: none; }
+  .heroi h1 { margin: 0 0 10px; font-size: clamp(2rem, 5.5vw, 3.4rem); line-height: 1.08; }
+  .heroi p { margin: 0 0 22px; font-size: clamp(1.05rem, 2.4vw, 1.3rem); max-width: 34ch; opacity: .95; }
+  .redes { display: flex; flex-wrap: wrap; gap: 10px; }
+  .redes a {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px;
+    background: rgba(255,255,255,.18); color: #fff; text-decoration: none; font-weight: 600;
+    border-radius: 999px; border: 1px solid rgba(255,255,255,.35);
+  }
+  .redes a:hover, .redes a:focus-visible { background: #fff; color: var(--azul-escuro); }
+
+  /* ===== Jogos ===== */
+  main { margin-top: -36px; }
+  h2 { font-size: 1.5rem; margin: 0 0 18px; }
+  .secao { padding: 8px 0 28px; }
+  .jogos { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .jogo {
+    background: var(--cartao); border: 1px solid var(--linha); border-radius: var(--raio);
+    padding: 22px; display: flex; flex-direction: column; gap: 14px;
+    box-shadow: 0 6px 22px rgba(30, 40, 120, .08);
+  }
+  .jogo .cab { display: flex; align-items: center; gap: 16px; }
+  .jogo .icone, .jogo .icone-falta {
+    width: 76px; height: 76px; border-radius: 18px; flex: none; object-fit: cover;
+  }
+  .jogo .icone-falta {
+    display: grid; place-items: center; background: var(--azul); color: #fff; font-weight: 800; font-size: 1.8rem;
+  }
+  .jogo h3 { margin: 0; font-size: 1.3rem; }
+  .jogo .etiqueta { margin: 2px 0 0; color: var(--tinta-suave); font-size: .92rem; }
+  .jogo p.desc { margin: 0; color: var(--tinta); }
+  .jogo ul { margin: 0; padding-left: 20px; color: var(--tinta-suave); }
+  .jogo .rodape { margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .botao {
+    display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px;
+    background: var(--azul-escuro); color: #fff; font-weight: 700; text-decoration: none; border-radius: 12px;
+  }
+  .botao:hover, .botao:focus-visible { background: var(--azul-medio); }
+  .nota { font-size: .85rem; color: var(--tinta-suave); margin: 0; }
+  .brevemente { color: var(--tinta-suave); margin-top: 18px; }
+
+  /* ===== Contacto ===== */
+  .contacto {
+    background: var(--cartao); border: 1px solid var(--linha); border-radius: var(--raio);
+    padding: 22px; margin-bottom: 36px;
+  }
+  .contacto p { margin: 0 0 6px; }
+  .contacto a.email { font-weight: 700; font-size: 1.1rem; overflow-wrap: anywhere; }
+
+  /* ===== Rodapé ===== */
+  footer { border-top: 1px solid var(--linha); padding: 22px 0 40px; color: var(--tinta-suave); font-size: .92rem; }
+  footer ul { list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; }
+  footer a { color: var(--tinta-suave); }
+
+  a:focus-visible, button:focus-visible { outline: 3px solid #ffd54a; outline-offset: 2px; }
+
+  /* ===== Telemóvel ===== */
+  @media (max-width: 640px) {
+    .heroi { flex-direction: column; align-items: flex-start; gap: 18px; padding-top: 28px; }
+    .heroi img.logo { width: 120px; }
+    .topo { padding-bottom: 56px; }
+    .jogos { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="caixa">
+    <div class="barra">
+      <div class="marca"><img src="assets/favicon.png" alt="" width="40" height="40"><span>LABraga Games</span></div>
+      <div class="idioma" role="group" aria-label="Idioma / Language">
+        <button type="button" data-lang="pt" aria-pressed="true">PT</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+    <div class="heroi">
+      <img class="logo" src="assets/logo.png" alt="Monograma LB da LABraga Games" width="190" height="205">
+      <div>
+        <h1>LABraga Games</h1>
+        <p data-i18n="tagline">Jogos para telemóvel feitos em Portugal. Grátis no Android.</p>
+        <div class="redes">
+          <a href="https://www.instagram.com/labraga.games" rel="noopener">Instagram</a>
+          <a href="https://www.youtube.com/@labraga.games" rel="noopener">YouTube</a>
+          <a href="https://www.tiktok.com/@labraga.games" rel="noopener">TikTok</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="caixa">
+  <section class="secao" id="jogos">
+    <h2 data-i18n="jogos">Os nossos jogos</h2>
+    <div class="jogos">
+
+      <!-- ===== PipeConnect ===== -->
+      <article class="jogo">
+        <div class="cab">
+          <img class="icone" src="assets/icone-pipeconnect.png" alt="" width="76" height="76" data-letra="P">
+          <div>
+            <h3>PipeConnect</h3>
+            <p class="etiqueta" data-i18n="pc_tag">Puzzle de canos</p>
+          </div>
+        </div>
+        <p class="desc" data-i18n="pc_desc">Roda as peças e liga todos os canos. Níveis infinitos, três dificuldades e estrelas por cada nível.</p>
+        <ul>
+          <li data-i18n="pc_l1">3 dificuldades</li>
+          <li data-i18n="pc_l2">Níveis infinitos</li>
+          <li data-i18n="langs5">Disponível em 5 idiomas: PT, EN, ES, FR, DE</li>
+        </ul>
+        <div class="rodape">
+          <a class="botao" data-play="com.labraga.pipeconnect"
+             href="https://play.google.com/store/apps/details?id=com.labraga.pipeconnect"
+             rel="noopener" data-i18n="obter">Obter na Google Play</a>
+          <p class="nota" data-i18n="monet">Grátis, com anúncios entre jogos e compras opcionais.</p>
+        </div>
+      </article>
+
+      <!-- ===== Sudoku ===== -->
+      <article class="jogo">
+        <div class="cab">
+          <img class="icone" src="assets/icone-sudoku.png" alt="" width="76" height="76" data-letra="S">
+          <div>
+            <h3 data-i18n="su_nome">Sudoku por LABraga</h3>
+            <p class="etiqueta" data-i18n="su_tag">Sudoku clássico</p>
+          </div>
+        </div>
+        <p class="desc" data-i18n="su_desc">Sudoku com 4 dificuldades, notas, ajudas, temas visuais, puzzle do dia, recompensas diárias e conquistas.</p>
+        <ul>
+          <li data-i18n="su_l1">4 dificuldades</li>
+          <li data-i18n="su_l2">Puzzle do dia e recompensa diária</li>
+          <li data-i18n="langs5">Disponível em 5 idiomas: PT, EN, ES, FR, DE</li>
+        </ul>
+        <div class="rodape">
+          <a class="botao" data-play="com.labragagames.sudoku"
+             href="https://play.google.com/store/apps/details?id=com.labragagames.sudoku"
+             rel="noopener" data-i18n="obter">Obter na Google Play</a>
+          <p class="nota" data-i18n="monet">Grátis, com anúncios entre jogos e compras opcionais.</p>
+        </div>
+      </article>
+
+    </div>
+    <p class="brevemente" data-i18n="breve">Mais jogos a caminho.</p>
+    <p><a href="https://play.google.com/store/apps/developer?id=Labraga+Games" rel="noopener" data-i18n="todos">Ver todos os jogos na Google Play</a></p>
+  </section>
+
+  <section class="contacto" id="contacto">
+    <h2 data-i18n="contacto">Contacto</h2>
+    <p data-i18n="contacto_txt">Dúvidas, sugestões ou problemas num jogo? Escreve-nos.</p>
+    <p><a class="email" href="mailto:labraga.games@gmail.com">labraga.games@gmail.com</a></p>
+  </section>
+</main>
+
+<footer>
+  <div class="caixa">
+    <ul>
+      <li><a href="https://sites.google.com/view/pipeconnect-privacy-policy/p%C3%A1gina-inicial" rel="noopener" data-i18n="priv_pc">Política de privacidade – PipeConnect</a></li>
+      <li><a href="https://sites.google.com/view/sudoku-labraga-legal?pli=1&amp;authuser=0" rel="noopener" data-i18n="priv_su">Política de privacidade – Sudoku</a></li>
+    </ul>
+    <div>© 2026 LABraga Games</div>
+  </div>
+</footer>
+
+<script>
+  // ===== Textos em PT e EN (o HTML já vem em PT, por isso funciona sem JavaScript) =====
+  var TEXTOS = {
+    pt: {
+      tagline: "Jogos para telemóvel feitos em Portugal. Grátis no Android.",
+      jogos: "Os nossos jogos",
+      pc_tag: "Puzzle de canos",
+      pc_desc: "Roda as peças e liga todos os canos. Níveis infinitos, três dificuldades e estrelas por cada nível.",
+      pc_l1: "3 dificuldades", pc_l2: "Níveis infinitos",
+      su_nome: "Sudoku por LABraga", su_tag: "Sudoku clássico",
+      su_desc: "Sudoku com 4 dificuldades, notas, ajudas, temas visuais, puzzle do dia, recompensas diárias e conquistas.",
+      su_l1: "4 dificuldades", su_l2: "Puzzle do dia e recompensa diária",
+      langs5: "Disponível em 5 idiomas: PT, EN, ES, FR, DE",
+      obter: "Obter na Google Play",
+      monet: "Grátis, com anúncios entre jogos e compras opcionais.",
+      breve: "Mais jogos a caminho.",
+      todos: "Ver todos os jogos na Google Play",
+      contacto: "Contacto",
+      contacto_txt: "Dúvidas, sugestões ou problemas num jogo? Escreve-nos.",
+      priv_pc: "Política de privacidade – PipeConnect",
+      priv_su: "Política de privacidade – Sudoku",
+      titulo: "LABraga Games – Jogos para telemóvel feitos em Portugal"
+    },
+    en: {
+      tagline: "Mobile games made in Portugal. Free on Android.",
+      jogos: "Our games",
+      pc_tag: "Pipe puzzle",
+      pc_desc: "Rotate the pieces and connect every pipe. Endless levels, three difficulty levels and stars for each level.",
+      pc_l1: "3 difficulty levels", pc_l2: "Endless levels",
+      su_nome: "Sudoku by LABraga", su_tag: "Classic Sudoku",
+      su_desc: "Sudoku with 4 difficulty levels, notes, hints, visual themes, daily puzzle, daily rewards and achievements.",
+      su_l1: "4 difficulty levels", su_l2: "Daily puzzle and daily reward",
+      langs5: "Available in 5 languages: PT, EN, ES, FR, DE",
+      obter: "Get it on Google Play",
+      monet: "Free, with ads between games and optional in-app purchases.",
+      breve: "More games on the way.",
+      todos: "See all games on Google Play",
+      contacto: "Contact",
+      contacto_txt: "Questions, suggestions or a problem in a game? Write to us.",
+      priv_pc: "Privacy policy – PipeConnect",
+      priv_su: "Privacy policy – Sudoku",
+      titulo: "LABraga Games – Mobile games made in Portugal"
+    }
+  };
+
+  // Origem do visitante: ?from=instagram, ?from=youtube, ?from=tiktok (só letras/números)
+  var origem = "site";
+  try {
+    var p = new URLSearchParams(location.search).get("from");
+    if (p && /^[a-z0-9_-]{1,20}$/i.test(p)) origem = p.toLowerCase();
+  } catch (e) {}
+
+  // Liga cada botão à Play Store, com a origem para medir instalações na Play Console
+  function ligarPlay() {
+    var botoes = document.querySelectorAll("[data-play]");
+    for (var i = 0; i < botoes.length; i++) {
+      var ref = "utm_source=" + origem + "&utm_medium=organic";
+      botoes[i].href = "https://play.google.com/store/apps/details?id=" +
+        botoes[i].getAttribute("data-play") + "&referrer=" + encodeURIComponent(ref);
+    }
+  }
+
+  function aplicarIdioma(lang) {
+    var t = TEXTOS[lang] || TEXTOS.pt;
+    var els = document.querySelectorAll("[data-i18n]");
+    for (var i = 0; i < els.length; i++) {
+      var k = els[i].getAttribute("data-i18n");
+      if (t[k]) els[i].textContent = t[k];
+    }
+    document.documentElement.lang = (lang === "en") ? "en" : "pt-PT";
+    document.title = t.titulo;
+    var bs = document.querySelectorAll(".idioma button");
+    for (var j = 0; j < bs.length; j++) {
+      bs[j].setAttribute("aria-pressed", bs[j].getAttribute("data-lang") === lang ? "true" : "false");
+    }
+    try { localStorage.setItem("lang", lang); } catch (e) {}
+  }
+
+  // Ícone em falta: mostra um quadrado com a inicial do jogo
+  function iconesEmFalta() {
+    var imgs = document.querySelectorAll("img.icone");
+    for (var i = 0; i < imgs.length; i++) {
+      (function (img) {
+        function trocar() {
+          var d = document.createElement("div");
+          d.className = "icone-falta";
+          d.setAttribute("aria-hidden", "true");
+          d.textContent = img.getAttribute("data-letra") || "?";
+          img.replaceWith(d);
+        }
+        if (img.complete && img.naturalWidth === 0) trocar();
+        else img.addEventListener("error", trocar);
+      })(imgs[i]);
+    }
+  }
+
+  var guardado = null;
+  try { guardado = localStorage.getItem("lang"); } catch (e) {}
+  var inicial = guardado || ((navigator.language || "pt").toLowerCase().indexOf("pt") === 0 ? "pt" : "en");
+
+  document.querySelectorAll(".idioma button").forEach(function (b) {
+    b.addEventListener("click", function () { aplicarIdioma(b.getAttribute("data-lang")); });
+  });
+
+  ligarPlay();
+  iconesEmFalta();
+  if (inicial !== "pt") aplicarIdioma(inicial);
+</script>
+</body>
+</html>
